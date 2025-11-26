@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnements
+.env/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Données volumineuses
+data/*.csv
+data/*.xlsx
+data/*.zip
+data/raw/
+
+# Mac / Windows
+.DS_Store
+Thumbs.db

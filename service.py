@@ -72,34 +72,28 @@ class BuildingInput(BaseModel):
         return v
 
 
-class PredictionOutput(BaseModel):
-    prediction: float
-    unit: str
-    message: str
-    inputs_interpreted: Dict[str, Any]
-
-
 # -------------------------------------------------------------------
-#  Service BentoML nouvelle API
+#  Service BentoML
 # -------------------------------------------------------------------
 
 @bentoml.service
 class SeattleEnergyService:
     def __init__(self) -> None:
-        # Chargement du pipeline sklearn sauvegardé
+        # Chargement du pipeline sklearn
         self.model = bentoml.sklearn.load_model(MODEL_TAG)
-        # Récupération des meta (feature_names)
+        # Récupération des meta (feature_names) depuis le Model Store
         model_ref = bentoml.models.get(MODEL_TAG)
         self.feature_names = model_ref.custom_objects["feature_names"]
 
     @bentoml.api
-    def predict(self, building: BuildingInput) -> PredictionOutput:
+    def predict(self, building: BuildingInput) -> Dict[str, Any]:
         """
         Endpoint /predict
-        - Valide les données via Pydantic
-        - Map les champs utilisateur -> colonnes modèle
+        - Valide les données via Pydantic (BuildingInput)
+        - Map les champs utilisateur -> colonnes du modèle
         - Ajoute BuildingType = 'NonResidential'
         - Réaligne les features dans l'ordre de X_train
+        - Retourne la prédiction sous forme de dict JSON-sérialisable
         """
 
         # 1) Données validées par Pydantic
@@ -125,10 +119,10 @@ class SeattleEnergyService:
         # 6) Prédiction
         y_pred = self.model.predict(df_model)[0]
 
-        # 7) Réponse structurée
-        return PredictionOutput(
-            prediction=float(y_pred),
-            unit="kBtu/sf",
-            message="Prévision de SiteEUI (consommation énergétique normalisée).",
-            inputs_interpreted=data_for_model,
-        )
+        # 7) Réponse JSON
+        return {
+            "prediction": float(y_pred),
+            "unit": "kBtu/sf",
+            "message": "Prévision de SiteEUI (consommation énergétique normalisée).",
+            "inputs_interpreted": data_for_model,
+        }

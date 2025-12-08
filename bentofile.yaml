@@ -1,0 +1,11 @@
+service: "service:SeattleEnergyService"
+
+python:
+  packages:
+    - bentoml
+    - scikit-learn
+    - pandas
+    - pydantic
+
+models:
+  - "seattle_energy_predictor:latest"

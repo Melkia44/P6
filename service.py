@@ -12,7 +12,7 @@ BUILDING_TYPE_VALUE = "NonResidential"  # P6 : uniquement bâtiments non réside
 MODEL_TAG = "seattle_energy_predictor:latest"
 
 # Mapping entre les champs exposés à l'utilisateur
-# et les noms de colonnes réels dans ton X_train / dataset
+# et les noms de colonnes réels dans le X_train / dataset
 COLUMN_MAPPING = {
     "year_built": "YearBuilt",
     "primary_property_type": "PrimaryPropertyType",

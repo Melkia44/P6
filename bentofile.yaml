@@ -1,12 +1,12 @@
-service: "service.py:SeattleEnergyXGBService"
+service: "service.py:SeattleEnergyGBService"
 
 python:
   packages:
     - bentoml
-    - scikit-learn
+    - scikit-learn==1.7.2
     - pandas
     - pydantic
     - xgboost
 
 models:
-  - "seattle_energy_xgb:latest"
+  - "seattle_energy_gb:latest"
